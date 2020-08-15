@@ -1,8 +1,8 @@
 <%= link_to "Add Person", new_person_path %><br/>
 
 <%= form_tag(people_path, method: :get) do %>
-  Search for Name: <%= text_field_tag :name %>
-  <%= submit_tag 'Search' %>
+  Search for Name: <%= text_field_tag :name, params[:name] %>
+  <%= submit_tag 'Search', name: nil %>
 <% end %>
 
 <% @people.each do |person| %>

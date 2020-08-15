@@ -5,12 +5,7 @@
 <%= @person.notes %>
 
 <hr>
-<h3>Parents</h3>
-<% @person.parents.each do |parent| %>
-  <%= link_to parent.name, parent %>
-<% end %>
+<%= render "parents", person: @person %>
+<%= link_to "Add Parent", add_parent_path %><br/>
 
-<h3>Children</h3>
-<% @person.children.each do |child| %>
-  <%= link_to child.name, child %>
-<% end %>
+<%= render "children", person: @person %>

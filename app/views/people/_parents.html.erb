@@ -1,0 +1,6 @@
+<h3>Parents</h3>
+<ul>
+<% person.parents.each do |parent| %>
+  <li><%= link_to parent.name, parent %></li> 
+<% end %>
+</ul>
