@@ -11,7 +11,7 @@ class PeopleController < ApplicationController
     @person = Person.find(params[:id])
   end
 
-  def add_parent
+  def modify_parents
     @person = Person.find(params[:id])
     if params[:name]
       @people = Person.where('name LIKE ?', "%#{params[:name]}%")

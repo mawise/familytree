@@ -1,6 +1,14 @@
 <h3>Children</h3>
 <ul>
 <% person.children.each do |child| %>
-  <li><%= link_to child.name, child %></li>
+  <li>
+  <%= link_to child.name, child %>
+  <% if allow_remove %>
+    <%= link_to "(Remove Child)",
+              remove_child_path(person, child),
+              method: :delete,
+              data: { confirm: 'Are you sure?'} %>
+  <% end %>
+  </li>
 <% end %>
 </ul>

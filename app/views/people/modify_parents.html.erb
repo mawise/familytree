@@ -1,8 +1,8 @@
 
-<h2>Add Parent to: <%= @person.name %></h2>
+<h2>Modify Parents of: <%= @person.name %></h2>
 <%= @person.birth %><br/>
 
-<%= form_tag(add_parent_path, method: :get) do %>
+<%= form_tag(modify_parents_path, method: :get) do %>
   Search for Name: <%= text_field_tag :name, params[:name] %>
   <%= submit_tag 'Search', name: nil %>
 <% end %>
@@ -18,4 +18,4 @@
 <% end %>
 
 <hr>
-<%= render "parents", person: @person %>
+<%= render "parents", person: @person, allow_remove: true %>

@@ -5,7 +5,7 @@
 <%= @person.notes %>
 
 <hr>
-<%= render "parents", person: @person %>
-<%= link_to "Add Parent", add_parent_path %><br/>
+<%= render "parents", person: @person, allow_remove: false %>
+<%= link_to "Modify Parents", modify_parents_path %><br/>
 
-<%= render "children", person: @person %>
+<%= render "children", person: @person, allow_remove: false %>
