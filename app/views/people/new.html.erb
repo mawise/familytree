@@ -1,0 +1,19 @@
+<h2>Create New Person</h2>
+
+<%= form_with model: @person, local: true do |form| %>
+  <p>
+    <%= form.label :name %><br/>
+    <%= form.text_field :name %>
+  </p>
+  <p>
+    <%= form.label :birth %><br/>
+    <%= form.date_field :birth %>
+  </p>
+  <p>
+    <%= form.label :notes %><br/>
+    <%= form.text_area :notes, size: "60x12" %>
+  </p>
+  <p>
+  <%= form.submit "Create" %>
+  </p>
+<% end %>

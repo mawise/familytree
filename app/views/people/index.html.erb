@@ -1,0 +1,12 @@
+<%= link_to "Add Person", new_person_path %><br/>
+
+<%= form_tag(people_path, method: :get) do %>
+  Search for Name: <%= text_field_tag :name %>
+  <%= submit_tag 'Search' %>
+<% end %>
+
+<% @people.each do |person| %>
+<h2><%= link_to person.name, person %></h2>
+<%= person.birth %><br/>
+<%= person.notes %>
+<% end %>

@@ -1,0 +1,34 @@
+<h2>Edit Person</h2>
+
+<%= form_with model: @person, local: true do |form| %>
+
+  <% if @person.errors.any? %>
+    <div id="error_explanation">
+      <h2>
+        <%= pluralize(@person.errors.count, "error") %> prohibited
+        this article from being saved:
+      </h2>
+      <ul>
+        <% @person.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <p>
+    <%= form.label :name %><br/>
+    <%= form.text_field :name %>
+  </p>
+  <p>
+    <%= form.label :birth %><br/>
+    <%= form.date_field :birth %>
+  </p>
+  <p>
+    <%= form.label :notes %><br/>
+    <%= form.text_area :notes, size: "60x12" %>
+  </p>
+  <p>
+  <%= form.submit "Save Changes" %>
+  </p>
+<% end %>
