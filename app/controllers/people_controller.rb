@@ -60,7 +60,11 @@ class PeopleController < ApplicationController
     @parent = Person.find(relationship_params[:parent_id])
     @return_person = Person.find(relationship_params[:return_id])
     @child.parents << @parent
-    redirect_to @return_person
+    if (@return_person == @child)
+      redirect_to modify_parents_path(@return_person)
+    else
+      redirect_to modify_children_path(@return_person)
+    end
   end
 
   def remove_child
