@@ -83,12 +83,16 @@ class PeopleController < ApplicationController
 
   def show_upgraph
     @person = Person.find(params[:id])
-    render plain: make_upgraph(@person)
+#    render plain: make_upgraph(@person)
+    @graph = make_upgraph(@person)
+    render :graph
   end
 
   def show_downgraph
     @person = Person.find(params[:id])
-    render plain: make_downgraph(@person)
+#    render plain: make_downgraph(@person)
+    @graph = make_downgraph(@person)
+    render :graph
   end
 
   private

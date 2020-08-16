@@ -1,3 +1,10 @@
-<div id="graph">
-<%= graph %>
-</div>
+<div id="graphsource" style="display:none;"><%= @graph %></div>
+<div id="graph" style="text-align: center;"></div>
+
+<script>
+var graphsource = document.getElementById("graphsource").innerHTML;
+//d3.select("body").style("background-color", "black");
+//alert(graphsource);
+d3.graphviz("#graph").renderDot('digraph {a -> b}');
+//document.getElementById("graph").innerHTML = graphsource;
+</script>
