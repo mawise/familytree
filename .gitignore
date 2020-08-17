@@ -28,4 +28,6 @@
 .byebug_history
 
 # Ignore master key for decrypting credentials and more.
-/config/master.key
+#/config/master.key #not using rails for any credentials
+
+deployment/*
