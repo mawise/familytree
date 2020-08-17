@@ -1,4 +1,7 @@
 class PeopleController < ApplicationController
+
+  before_action :authenticate_user!
+
   def index
     if params[:name]
       @people = Person.where('name LIKE ?', "%#{params[:name]}%")

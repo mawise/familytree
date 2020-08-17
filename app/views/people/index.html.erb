@@ -1,5 +1,3 @@
-<%= link_to "Add Person", new_person_path %><br/>
-
 <%= form_tag(people_path, method: :get) do %>
   Search for Name: <%= text_field_tag :name, params[:name] %>
   <%= submit_tag 'Search', name: nil %>
@@ -7,6 +5,6 @@
 
 <% @people.each do |person| %>
 <h2><%= link_to person.name, person %></h2>
-<%= person.birth %><br/>
+<%= "Born: " + date_in_words(person.birth) %><br/>
 <%= person.notes %>
 <% end %>

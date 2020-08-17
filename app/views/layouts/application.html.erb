@@ -10,7 +10,22 @@
   </head>
 
   <body>
-    <%= link_to "Home", "/" %><br/>
+    <nav><header>
+      <%= link_to "Home", "/" %>
+      <%= link_to "Add Person", new_person_path %>
+      <% if user_signed_in? %>
+        <%= link_to "Logout", destroy_user_session_path, method: :delete  %>
+      <% else %>
+        <%= link_to "Login", new_user_session_path %>
+      <% end %>
+    </header></nav>
+    <% if notice and !notice.empty? %>
+      <p class="notice"><%= notice %><span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span></p>
+    <% end %>
+    <% if alert and !alert.empty? %>
+      <p class="alert"><%= alert %><span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span></p>
+    <% end %>
+
     <%= yield %>
   </body>
 </html>

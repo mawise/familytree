@@ -1,0 +1,28 @@
+.alert,
+.notice {
+  padding: 1rem;
+  margin-top: 0rem;
+  margin-bottom: 2rem;
+  border-radius: 0.5rem;
+}
+.notice {
+  background-color: var(--nc-notice);
+}
+
+.alert {
+  background-color: var(--nc-alert);
+}
+
+.closebtn {
+  margin-left: 1rem;
+  font-weight: bold;
+  float: right;
+  font-size: 1.4rem;
+  line-height: 1.5rem;
+  cursor: pointer;
+  transition: 0.07s;
+}
+
+.closebtn:hover {
+  color: var(--nc-bg-1);
+}

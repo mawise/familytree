@@ -1,0 +1,3 @@
+# Create user from console:
+
+User.create! email: "matt@wise.com", password:"123456"

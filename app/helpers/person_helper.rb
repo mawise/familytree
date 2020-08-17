@@ -3,7 +3,7 @@ module PersonHelper
     if (date.nil?)
       ""
     else
-      date.strftime("%b %-d %Y")
+      date.strftime("%B %-d, %Y")
     end
   end
 
