@@ -2,3 +2,7 @@
   display: flex;
   flex-flow: row wrap;
 }
+
+svg {
+  max-width: 100%;
+}

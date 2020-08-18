@@ -12,8 +12,8 @@
   <body>
     <nav><header>
       <%= link_to "Home", "/" %>
-      <%= link_to "Add Person", new_person_path %>
       <% if user_signed_in? %>
+        <%= link_to "Add Person", new_person_path %>
         <%= link_to "Logout", destroy_user_session_path, method: :delete  %>
       <% else %>
         <%= link_to "Login", new_user_session_path %>

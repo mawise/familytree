@@ -86,15 +86,15 @@ class PeopleController < ApplicationController
 
   def show_upgraph
     @person = Person.find(params[:id])
-#    render plain: make_upgraph(@person)
-    @graph = make_upgraph(@person)
+    graph_text = make_upgraph(@person)
+    @graph = create_svg(graph_text).html_safe
     render :graph
   end
 
   def show_downgraph
     @person = Person.find(params[:id])
-#    render plain: make_downgraph(@person)
-    @graph = make_downgraph(@person)
+    graph_text = make_downgraph(@person).html_safe
+    @graph = create_svg(graph_text).html_safe
     render :graph
   end
 
@@ -111,7 +111,7 @@ class PeopleController < ApplicationController
   ## do not call directly, used for recursive calls
   def upgraph(person)
     out = ""
-    out += "#{person.id}[label=\"#{person.name}\"];\n"
+    out += "#{person.id}[label=\"#{person.name}\" URL=\"#{person_path(person)}\"];\n"
     person.parents.each do |parent|
       out += "#{person.id} -> #{parent.id};\n"
       out += upgraph(parent)
@@ -128,10 +128,10 @@ class PeopleController < ApplicationController
     out
   end
 
-  ## Note, there is probably a bug if multiple children have the same set of
+  ## Note, there is probably a bug when multiple children have the same set of
   ## three-or-more parents but the parents are in different orders
   def downgraph(person)
-    out = "#{person.id}[label=\"#{person.name}\"];\n"
+    out = "#{person.id}[label=\"#{person.name}\" URL=\"#{person_path(person)}\"];\n"
     parents_ids = Set.new
     person.children.each do |child|
       parents_id = "\"#{person.id}"
@@ -161,7 +161,7 @@ class PeopleController < ApplicationController
             out += "#{person.id} -> #{parents_id}[dir=none];\n"
             parents_set.each do |child_parent|
               out += "#{parents_id} -> #{child_parent.id}[dir=none];\n"
-              out += "#{child_parent.id}[label=\"#{child_parent.name}\"];\n"
+              out += "#{child_parent.id}[label=\"#{child_parent.name}\" URL=\"#{person_path(person)}\"];\n"
             end
           out += "}\n"  ## end cluster subgraph
         end
@@ -180,6 +180,22 @@ class PeopleController < ApplicationController
     out += downgraph(person)
     out += "}"
     out
+  end
+
+  def create_svg(graph_text)
+    ## TODO check if `dot` command exists
+    tmp_path = "tmp/storage/" ## TODO: create path if not exists
+    filename = graph_text.hash.abs.to_s
+    ## TODO if hash.svg already exists, return it as-is?
+    File.open("#{tmp_path}#{filename}.dot", 'w') do |f|
+      f.write(graph_text)
+    end
+    `cat #{tmp_path}#{filename}.dot | dot -T svg -o #{tmp_path}#{filename}.svg`
+    svg_text = ""
+    File.open("#{tmp_path}#{filename}.svg", 'r') do |f|
+      svg_text = f.read
+    end
+    svg_text
   end
 
 end
