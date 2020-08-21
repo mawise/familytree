@@ -161,7 +161,7 @@ class PeopleController < ApplicationController
             out += "#{person.id} -> #{parents_id}[dir=none];\n"
             parents_set.each do |child_parent|
               out += "#{parents_id} -> #{child_parent.id}[dir=none];\n"
-              out += "#{child_parent.id}[label=\"#{child_parent.name}\" URL=\"#{person_path(person)}\"];\n"
+              out += "#{child_parent.id}[label=\"#{child_parent.name}\" URL=\"#{person_path(child_parent)}\"];\n"
             end
           out += "}\n"  ## end cluster subgraph
         end
