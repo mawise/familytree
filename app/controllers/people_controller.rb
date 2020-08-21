@@ -113,7 +113,7 @@ class PeopleController < ApplicationController
     out = ""
     out += "#{person.id}[label=\"#{person.name}\" URL=\"#{person_path(person)}\"];\n"
     person.parents.each do |parent|
-      out += "#{person.id} -> #{parent.id};\n"
+      out += "#{parent.id} -> #{person.id};\n"
       out += upgraph(parent)
     end
     out
@@ -122,7 +122,7 @@ class PeopleController < ApplicationController
   def make_upgraph(person)
     out = ""
     out += "digraph G {\n"
-    out += "rankdir=BT;\n"
+    out += "rankdir=LR;\n"
     out += upgraph(person)
     out += "}"
     out
@@ -176,7 +176,7 @@ class PeopleController < ApplicationController
   def make_downgraph(person)
     out = ""
     out += "digraph G {\n"
-    out += "rankdir=TB;\n"
+    out += "rankdir=LR;\n"
     out += downgraph(person)
     out += "}"
     out
