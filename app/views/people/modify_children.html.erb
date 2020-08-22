@@ -1,5 +1,5 @@
 
-<h2>Modify Children of: <%= @person.name %></h2>
+<h2>Modify Children of: <%= link_to @person.name, person_path(@person) %></h2>
 <%= @person.birth %><br/>
 
 <%= form_tag(modify_children_path, method: :get) do %>
