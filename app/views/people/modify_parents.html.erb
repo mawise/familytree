@@ -1,6 +1,6 @@
 
 <h2>Modify Parents of: <%= link_to @person.name, person_path(@person) %></h2>
-<%= @person.birth %><br/>
+<%= date_in_words(@person.birth) %><br/>
 
 <%= form_tag(modify_parents_path, method: :get) do %>
   Search for Name: <%= text_field_tag :name, params[:name] %>
@@ -8,12 +8,14 @@
 <% end %>
 
 <% @people.each do |parent| %>
+  <% next if parent == @person %>
+  <% next if @person.parents.include? parent %>
   <%= form_with(scope: :relationship, url: create_relationship_path, method: :post, local: true, :class => "form-inline") do %>
     <%= hidden_field_tag "child_id", @person.id %>
     <%= hidden_field_tag "parent_id", parent.id %>
     <%= hidden_field_tag "return_id", @person.id %>
     <%= submit_tag 'Add As Parent', name: nil %>
-    <%= link_to "#{parent.name} #{parent.birth}", parent %> 
+    &nbsp;<%= link_to "#{parent.name} #{parent.birth}", parent %> 
   <% end %>
 <% end %>
 
