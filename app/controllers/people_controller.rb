@@ -137,7 +137,7 @@ class PeopleController < ApplicationController
     return "\"#{id}\""
   end
 
-  def dg(person)
+  def downgraph(person)
     person_label = "#{person.id}[label=\"#{person.name}\" URL=\"#{person_path(person)}\"];\n"
     if person.children.size == 0
       return person_label
@@ -202,61 +202,16 @@ class PeopleController < ApplicationController
         relationship.add(partner) unless (partner == person)
       end
       out += "#{relationship_id(person, relationship)} -> #{child.id};\n"
-      out += dg(child)
-    end
-    return out
-  end
-
-  ## Note, there is probably a bug when multiple children have the same set of
-  ## three-or-more parents but the parents are in different orders
-  def downgraph(person)
-    out = "#{person.id}[label=\"#{person.name}\" URL=\"#{person_path(person)}\"];\n"
-    parents_ids = Set.new
-    person.children.each do |child|
-      parents_id = "\"#{person.id}"
-      parents_set = Set.new
-      if (child.parents.size == 1)  ## Single parent, child points to them
-        out += "#{person.id} -> #{child.id};\n"
-      else  ## Multiple parents, create relationship node
-        
-        child.parents.each do |child_parent|
-          unless child_parent == person
-            parents_set.add(child_parent)
-            parents_id += "-#{child_parent.id}"
-          end
-        end
-        parents_id += "\""
- 
-        unless (parents_ids.include? parents_id)
-          parents_ids.add(parents_id)
-          rank = "{rank=same; #{person.id}, #{parents_id}"
-          parents_set.each do |child_parent|
-            rank += ", #{child_parent.id}"
-          end
-          rank += "}\n"
-          out += "subgraph \"cluster_#{parents_id.gsub("\"","")}\"{color=none\n"
-            out += rank
-            out += "#{parents_id}[shape=\"point\"];\n"
-            out += "#{person.id} -> #{parents_id}[dir=none];\n"
-            parents_set.each do |child_parent|
-              out += "#{parents_id} -> #{child_parent.id}[dir=none];\n"
-              out += "#{child_parent.id}[label=\"#{child_parent.name}\" URL=\"#{person_path(child_parent)}\"];\n"
-            end
-          out += "}\n"  ## end cluster subgraph
-        end
-
-        out += "#{parents_id} -> #{child.id};\n"
-      end ## end if-else on child.parents.size == 1
       out += downgraph(child)
     end
-    out
+    return out
   end
 
   def make_downgraph(person)
     out = ""
     out += "digraph G {\n"
     out += "rankdir=LR;\n"
-    out += dg(person)
+    out += downgraph(person)
     out += "}\n"
     out
   end
