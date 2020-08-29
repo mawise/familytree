@@ -1,0 +1,11 @@
+<h2>Modify Images of: <%= link_to @person.name, person_path(@person) %></h2>
+<%= date_in_words(@person.birth) %><br/>
+
+<%= form_tag(create_image_path(@person), method: "post", multipart: true) do %>
+  <%= file_field_tag 'image', accept: "image/*" %>
+  <%= submit_tag "Upload Image" %>
+<% end %>
+
+<hr>
+
+<%= render "images", person: @person, allow_remove: true %>

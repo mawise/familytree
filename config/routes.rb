@@ -13,5 +13,9 @@ Rails.application.routes.draw do
   get 'people/:id/upgraph', to: 'people#show_upgraph', as: 'show_upgraph'
   get 'people/:id/downgraph', to: 'people#show_downgraph', as: 'show_downgraph'
 
+  get 'people/:id/images', to: "people#modify_images", as: "images" 
+  post 'people/:id/images', to: "people#create_image", as: "create_image"
+  delete 'people/:id/images/:image_id', to: "people#destroy_image", as: "destroy_image"
+
   root to: 'people#index'
 end

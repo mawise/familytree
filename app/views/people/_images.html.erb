@@ -1,0 +1,13 @@
+<h3>Images</h3>
+<%= "There are no images of #{person.name} <br/>".html_safe if person.images.empty? %>
+<% person.images.each do |image| %>
+  <img src="<%= rails_blob_path image %>" alt="Picture of <%= person.name %>"></img><br/>
+  <% if allow_remove %>
+    <%= link_to "(Remove Image)",
+              destroy_image_path(person, image),
+              method: :delete,
+              data: { confirm: 'Are you sure?'} %>
+    <br/>
+  <% end %>
+  <hr>
+<% end %>

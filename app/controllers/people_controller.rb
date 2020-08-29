@@ -32,6 +32,23 @@ class PeopleController < ApplicationController
     end
   end
 
+  def modify_images
+    @person = Person.find(params[:id])
+  end
+
+  def create_image
+    @person = Person.find(params[:id])
+    @person.images.attach params[:image]
+    @person.save
+    redirect_to images_path(@person)
+  end
+
+  def destroy_image
+    @person = Person.find(params[:id])
+    @person.images.find(params[:image_id]).purge_later
+    redirect_to images_path(@person)
+  end
+
   def edit
     @person = Person.find(params[:id])
   end

@@ -11,3 +11,6 @@
 
 <%= render "children", person: @person, allow_remove: false %>
 <%= link_to "Modify Children", modify_children_path %><br/>
+
+<%= render "images", person: @person, allow_remove: false %>
+<%= link_to "Modify Images", images_path(@person) %>
