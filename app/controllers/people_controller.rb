@@ -145,33 +145,44 @@ class PeopleController < ApplicationController
     out = ""
     ## get all partners and partner groups (relationships)
     partners = Set.new # set of people, excluding person
-    relationships = Set.new # set of sets of people, excluding person
-    person.children.each do |child|
+    relationships = [] # set of sets of people, excluding person
+    person.children.sort do |a,b|
+      if a.birth.nil? and b.birth.nil?
+        0
+      elsif a.birth.nil?
+        -1
+      elsif b.birth.nil?
+        1
+      else
+        a.birth <=> b.birth
+      end
+    end.each do |child|
       relationship = Set.new # one relationship per child, adding is idempotent
       child.parents.each do |child_parent|
         partners.add(child_parent) unless (child_parent == person)
         relationship.add(child_parent) unless (child_parent == person)
       end
-      relationships.add(relationship)
+      relationships << relationship unless relationships.include? relationship
     end
     ## cluster with person, partners, and relationship nodes. 
     out += "subgraph \"cluster_#{person.id}\"{color=none\n"
     out += person_label
-      ## partners -> first relstionship -> person
-      ## person -> other relationships -> partners
+      ## person -> first relationship -> partners
+      ## partners -> other relstionships -> person
+      ## NOTE: reverse this order for rankdir=TB
     first_relationship = true
     relationships.each do |relationship|
       next if relationship.size < 1 # child has only 1 parent
       if first_relationship
-        out += "#{relationship_id(person, relationship)} -> #{person.id}[dir=none];\n"
-        relationship.each do |partner|
-          out += "#{partner.id} -> #{relationship_id(person, relationship)}[dir=none];\n"
-        end
-        first_relationship = false
-      else
         out += "#{person.id} -> #{relationship_id(person, relationship)}[dir=none];\n"
         relationship.each do |partner|
           out += "#{relationship_id(person, relationship)} -> #{partner.id}[dir=none];\n"
+        end
+        first_relationship = false
+      else
+        out += "#{relationship_id(person, relationship)} -> #{person.id}[dir=none];\n"
+        relationship.each do |partner|
+          out += "#{partner.id} -> #{relationship_id(person, relationship)}[dir=none];\n"
         end
       end
     end
