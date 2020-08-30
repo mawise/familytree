@@ -139,7 +139,7 @@ class PeopleController < ApplicationController
   def make_upgraph(person)
     out = ""
     out += "digraph G {\n"
-    out += "rankdir=TB;\n"
+    out += "rankdir=LR;\n"
     out += upgraph(person)
     out += "}\n"
     out
