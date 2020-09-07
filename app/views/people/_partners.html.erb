@@ -1,0 +1,10 @@
+<% if person.partners.count > 0 %>
+  <h3>Has Children With</h3>
+  <ul>
+  <% person.partners.each do |partner| %>
+    <li>
+    <%= link_to partner.name, partner %>
+    </li>
+  <% end %>
+  </ul>
+<% end %>

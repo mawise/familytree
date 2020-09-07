@@ -1,0 +1,10 @@
+<% if person.siblings.count > 0 %>
+  <h3>Siblings</h3>
+  <ul>
+  <% person.siblings.each do |sibling| %>
+    <li>
+    <%= link_to sibling.name, sibling %>
+    </li>
+  <% end %>
+  </ul>
+<% end %>

@@ -6,11 +6,20 @@
 <%= @person.notes.gsub("\n","<br/>").html_safe %>
 
 <hr>
-<%= render "parents", person: @person, allow_remove: false %>
-<%= link_to "Modify Parents", modify_parents_path %><br/>
-
-<%= render "children", person: @person, allow_remove: false %>
-<%= link_to "Modify Children", modify_children_path %><br/>
+<div style="display:flex;flex-wrap: wrap;justify-content:flex-start;">
+  <div style="margin-right:auto;">
+    <%= render "parents", person: @person, allow_remove: false %>
+    <%= link_to "Modify Parents", modify_parents_path %><br/>
+    
+    <%= render "children", person: @person, allow_remove: false %>
+    <%= link_to "Modify Children", modify_children_path %><br/>
+    
+  </div>
+  <div style="margin-right:auto;">
+    <%= render "partners", person: @person %>
+    <%= render "siblings", person: @person %>
+  </div>
+</div>
 
 <%= render "images", person: @person, allow_remove: false %>
 <%= link_to "Modify Images", images_path(@person) %>
