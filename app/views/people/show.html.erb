@@ -4,7 +4,7 @@
 <%= link_to 'Edit', edit_person_path(@person) %><br/>
 <%= "Born: " + date_in_words(@person.birth) %><br/>
 <%= "Place of Birth: " + (@person.birth_place || "Unknown") %><br/>
-<% unless @person.death.nil? and @person.death_place.empty? %>
+<% unless @person.death.nil? and (@person.death_place.nil? or @person.death_place.empty?) %>
   <%= "Died: " + date_in_words(@person.death) %><br/>
   <%= "Place of Death: " + (@person.death_place || "Unknown") %><br/>
 <% end %>
