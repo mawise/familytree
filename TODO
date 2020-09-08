@@ -1,5 +1,13 @@
 # TODO
 
  * Add fields: Birth Location, Death Date, Death Location
- * Modify Dates to support year-only dates
+ * Modify Dates to support year-only dates or month+year
  * Add custom captions for uploaded images
+ * Select a "portrait" for a person
+ * customize graphs:
+   * max number of generations
+   * display birth/death dates
+ * paginate the search results
+ * show message if no search results
+ * keep old search term (and results) when adding parents/children
+ * refactor new/edit form into a partial

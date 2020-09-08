@@ -1,24 +1,16 @@
-# README
+# Family Tree
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+I tried using Gramps, but it was too complex so I wrote my own?
 
-Things you may want to cover:
+## Deployment Notes
 
-* Ruby version
+* Deploy as a standard rails app. Uses SQlite even in production
 
-* System dependencies
+* Currently uses `dotenv` to store config in a dot file
 
-* Configuration
+* Expects S3 storage (for image uploads), specify bucket in `.env` file
 
-* Database creation
+* You need to manually create user accounts from the rails console:
+  * `User.create! email: "user@email.com", password:"123456"`
 
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+* Uses graphviz for generating graphs, make sure your system has graphviz installed 

@@ -10,6 +10,18 @@
     <%= form.date_field :birth %>
   </p>
   <p>
+    <%= form.label "Place of Birth" %><br/>
+    <%= form.text_field :birth_place %>
+  </p>
+  <p>
+    <%= form.label :death %><br/>
+    <%= form.date_field :death %>
+  </p>
+  <p>
+    <%= form.label "Place of Death" %><br/>
+    <%= form.text_field :death_place %>
+  </p>
+  <p>
     <%= form.label :notes %><br/>
     <%= form.text_area :notes, size: "60x12" %>
   </p>
