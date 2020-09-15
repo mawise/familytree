@@ -1,3 +1,4 @@
+include PersonHelper
 class PeopleController < ApplicationController
 
   before_action :authenticate_user!
@@ -12,6 +13,11 @@ class PeopleController < ApplicationController
 
   def show
     @person = Person.find(params[:id])
+  end
+
+  def show_gedcom
+    content = gedcom ## Defined in PersonHelper
+    render plain: content
   end
 
   def modify_parents

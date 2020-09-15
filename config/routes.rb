@@ -17,5 +17,7 @@ Rails.application.routes.draw do
   post 'people/:id/images', to: "people#create_image", as: "create_image"
   delete 'people/:id/images/:image_id', to: "people#destroy_image", as: "destroy_image"
 
+  get 'gedcom', to: "people#show_gedcom", as: "show_gedcom"
+
   root to: 'people#index'
 end
