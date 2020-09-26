@@ -28,4 +28,9 @@ class Person < ApplicationRecord
     sibs
   end
 
+  before_save :set_search_name 
+  private
+  def set_search_name
+    self.search_name = ActiveSupport::Inflector.transliterate(name)
+  end
 end

@@ -1,6 +1,7 @@
 # TODO
 
- * Add fields: Birth Location, Death Date, Death Location
+ * i18n for canonical version of name for search
+ * Add gender field to people
  * Modify Dates to support year-only dates or month+year
  * Add custom captions for uploaded images
  * Select a "portrait" for a person
@@ -11,3 +12,4 @@
  * show message if no search results
  * keep old search term (and results) when adding parents/children
  * refactor new/edit form into a partial
+ * GEDCOM export - https://www.gedcom.org/gedcom.html
