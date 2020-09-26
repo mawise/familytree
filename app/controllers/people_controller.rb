@@ -4,7 +4,7 @@ class PeopleController < ApplicationController
 
   def index
     if params[:name]
-      @people = Person.where('name LIKE ?', "%#{params[:name]}%")
+      @people = search_people(params[:name])
     else
       @people = []
     end
@@ -17,7 +17,7 @@ class PeopleController < ApplicationController
   def modify_parents
     @person = Person.find(params[:id])
     if params[:name]
-      @people = Person.where('name LIKE ?', "%#{params[:name]}%")
+      @people = search_people(params[:name])
     else
       @people = []
     end
@@ -26,7 +26,7 @@ class PeopleController < ApplicationController
   def modify_children
     @person = Person.find(params[:id])
     if params[:name]
-      @people = Person.where('name LIKE ?', "%#{params[:name]}%")
+      @people = search_people(params[:name])
     else
       @people = []
     end
@@ -123,6 +123,12 @@ class PeopleController < ApplicationController
 
   def relationship_params
     params.permit(:child_id, :parent_id, :return_id)
+  end
+
+  def search_people(name)
+    simple_name = ActiveSupport::Inflector.transliterate(name) # remove accents
+    people = Person.where('search_name LIKE ?', "%#{simple_name}%")
+    people
   end
 
   ## do not call directly, used for recursive calls
