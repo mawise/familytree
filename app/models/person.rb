@@ -6,6 +6,8 @@ class Person < ApplicationRecord
 
   has_many_attached :images
 
+  enum gender: {male: 0, female: 1, non_binary: 2}
+
   # people this person has had children with
   def partners
     p = Set.new

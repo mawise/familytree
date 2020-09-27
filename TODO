@@ -1,7 +1,5 @@
 # TODO
 
- * i18n for canonical version of name for search
- * Add gender field to people
  * Modify Dates to support year-only dates or month+year
  * Add custom captions for uploaded images
  * Select a "portrait" for a person

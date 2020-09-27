@@ -2,6 +2,7 @@
 <%= link_to "Descendancy", show_downgraph_path(@person) %>
 <h2><%= @person.name %></h2>
 <%= link_to 'Edit', edit_person_path(@person) %><br/>
+<%= "Gender: " + (display_gender(@person.gender)) %><br/>
 <%= "Born: " + date_in_words(@person.birth) %><br/>
 <%= "Place of Birth: " + (@person.birth_place || "Unknown") %><br/>
 <% unless @person.death.nil? and (@person.death_place.nil? or @person.death_place.empty?) %>

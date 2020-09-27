@@ -1,31 +1,3 @@
 <h2>Create New Person</h2>
 
-<%= form_with model: @person, local: true do |form| %>
-  <p>
-    <%= form.label :name %><br/>
-    <%= form.text_field :name %>
-  </p>
-  <p>
-    <%= form.label :birth %><br/>
-    <%= form.date_field :birth %>
-  </p>
-  <p>
-    <%= form.label "Place of Birth" %><br/>
-    <%= form.text_field :birth_place %>
-  </p>
-  <p>
-    <%= form.label :death %><br/>
-    <%= form.date_field :death %>
-  </p>
-  <p>
-    <%= form.label "Place of Death" %><br/>
-    <%= form.text_field :death_place %>
-  </p>
-  <p>
-    <%= form.label :notes %><br/>
-    <%= form.text_area :notes, size: "60x12" %>
-  </p>
-  <p>
-  <%= form.submit "Create" %>
-  </p>
-<% end %>
+<%= render "form", submit_text: "Create" %>
