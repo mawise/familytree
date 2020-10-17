@@ -1,13 +1,15 @@
 # TODO
 
- * Modify Dates to support year-only dates or month+year
+ * Modify Dates to support before/after/within-range dates
  * Add custom captions for uploaded images
  * Select a "portrait" for a person
  * customize graphs:
    * max number of generations
    * display birth/death dates
+   * show missing information (eg, highlight everyone with a missing birthday)
  * paginate the search results
  * show message if no search results
  * keep old search term (and results) when adding parents/children
- * refactor new/edit form into a partial
+ * create a new person from an existing person: eg "add new parent"
+   * creates and saves a new empty record with the relationship already created, link to edit page.
  * GEDCOM export - https://www.gedcom.org/gedcom.html
