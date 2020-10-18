@@ -92,6 +92,13 @@ module PersonHelper
     return date.strftime("%d %^b %Y")
   end
 
+  def gedcom_name(person)
+    name = person.name
+    givn, _, surn = name.rpartition(" ")
+    combined = "#{givn} /#{surn}/"
+    return "1 NAME #{combined}\n2 GIVN #{givn}\n2 SURN #{surn}\n"
+  end
+
   def gedcom_person(person, families_map)
     # get parents set, lookup family, save FAMC IDs
     famc = []
@@ -121,7 +128,7 @@ module PersonHelper
   def gedcom_person_content(person, families_as_child, families_as_spouse)
     out = ""
     out += "0 @I#{get_person_id(person)}@ INDI\n"
-    out += "1 NAME #{person.name}\n"
+    out += gedcom_name(person)
     out += "1 SEX F\n" if person.female?
     out += "1 SEX M\n" if person.male?
     families_as_child.each do |famc_id|
