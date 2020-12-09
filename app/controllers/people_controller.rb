@@ -111,14 +111,14 @@ class PeopleController < ApplicationController
     @person = Person.find(params[:id])
     graph_text = make_upgraph(@person)
     @graph = create_svg(graph_text).html_safe
-    render :graph
+    render :graph, layout: false
   end
 
   def show_downgraph
     @person = Person.find(params[:id])
     graph_text = make_downgraph(@person).html_safe
     @graph = create_svg(graph_text).html_safe
-    render :graph
+    render :graph, layout: false
   end
 
   private
