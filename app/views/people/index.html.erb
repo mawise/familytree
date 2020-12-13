@@ -5,6 +5,6 @@
 
 <% @people.each do |person| %>
 <h2><%= link_to person.name, person %></h2>
-<%= "Born: " + date_in_words(person.birth) %><br/>
+<%= "Born: " + date_range_in_words(person.born_after, person.born_before) %><br/>
 <%= person.notes %>
 <% end %>

@@ -24,7 +24,9 @@
   </p>
   <p>
     <%= form.label :birth %><br/>
-    <%= form.date_field :birth %>
+    <%= form.select :born_date_type, PersonHelper::DATE_OPTIONS %>
+    <%= form.date_field :born_after %>
+    <%= form.date_field :born_before %>
   </p>
   <p>
     <%= form.label "Place of Birth" %><br/>
@@ -32,7 +34,9 @@
   </p>
   <p>
     <%= form.label :death %><br/>
-    <%= form.date_field :death %>
+    <%= form.select :died_date_type, PersonHelper::DATE_OPTIONS %>
+    <%= form.date_field :died_after %>
+    <%= form.date_field :died_before %>
   </p>
   <p>
     <%= form.label "Place of Death" %><br/>
@@ -46,3 +50,101 @@
   <%= form.submit submit_text %>
   </p>
 <% end %>
+
+<script>
+/* pick which date fields to display, and which to hide based on type selector */
+function setDateFields(x) {
+  let date_start = document.getElementById('person_' + x + '_after')
+  let date_end = document.getElementById('person_' + x + '_before')
+  let date_type = document.getElementById('person_' + x + '_date_type')
+  if (date_type.value == 'on') {
+    date_start.style.display = "inline"
+    date_end.style.display = "none"
+    if (date_start.value === "") {
+      date_start.value = date_end.value
+    }
+  } else if (date_type.value === 'before') {
+    date_start.style.display = "none"
+    date_end.style.display = "inline"
+    if (date_end.value === "") {
+      date_end.value = date_start.value
+    }
+    date_start.value = ""
+  } else if (date_type.value === 'after') {
+    date_start.style.display = "inline"
+    date_end.style.display = "none"
+    if (date_start.value === "") {
+      date_start.value = date_end.value
+    }
+    date_end.value = ""
+  } else if (date_type.value === 'between') {
+    date_start.style.display = "inline"
+    date_end.style.display = "inline"
+  } 
+}
+/* on page load, pick which date type selector to use based on which date fields have values */
+function pickDateType(x) {
+  let date_start = document.getElementById('person_' + x + '_after')
+  let date_end = document.getElementById('person_' + x + '_before')
+  let date_type = document.getElementById('person_' + x + '_date_type')
+  if (date_start.value === date_end.value) { /* includes "" and "" */
+    date_type.value = "on"
+  } else if (date_start.value === "") {
+    date_type.value = "before"
+  } else if (date_end.value === "") {
+    date_type.value = "after"
+  } else {
+    date_type.value = "between"
+  }
+}
+/* 
+If type is "on", we only display the first field but we need both fields to
+store (and submit) the same value
+*/
+function alignEndDateField(x) {
+  let date_start = document.getElementById('person_' + x + '_after')
+  let date_end = document.getElementById('person_' + x + '_before')
+  let date_type = document.getElementById('person_' + x + '_date_type')
+  if (date_type.value === "on") {
+    date_end.value = date_start.value
+  }
+}
+
+/*
+Dates are always stored as a range.  
+Exact dates are stored with the same start and end date,
+open-ended ranges (only providing start, or end but not both) specify
+the even occured after or before the specifid date.
+For user-convenience, we allow the user to specify which type they want and
+we change which fields are visible accordingly.
+On page load, we first identify the type of range based on which values are empty
+and then set the type for the user and update the display accordingly.
+*/
+function init() {
+  pickDateType('born');
+  pickDateType('died');
+  setDateFields('born');
+  setDateFields('died');
+}
+
+document.getElementById('person_born_date_type').addEventListener('change', (event) => {
+  setDateFields('born');
+  alignEndDateField('born'); 
+});
+
+document.getElementById('person_died_date_type').addEventListener('change', (event) => {
+  setDateFields('died');
+  alignEndDateField('died'); 
+});
+
+document.getElementById('person_born_after').addEventListener('change', (event) => {
+  alignEndDateField('born'); 
+});
+
+document.getElementById('person_died_after').addEventListener('change', (event) => {
+  alignEndDateField('died'); 
+});
+
+window.addEventListener('DOMContentLoaded', init, false);
+
+</script>

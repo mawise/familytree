@@ -1,13 +1,35 @@
 module PersonHelper
   GENDER_MAP={nil=>"",""=>"","non_binary"=>"Non-Binary","male"=>"Male","female"=>"Female"}
+  DATE_FMT = "%B %-d, %Y"
+  DATE_OPTIONS = [
+    ["Between", "between"],
+    ["On", "on"],
+    ["Before", "before"],
+    ["After", "after"]]
 
   def date_in_words(date)
     if (date.nil?)
       ""
     else
-      date.strftime("%B %-d, %Y")
+      date.strftime(DATE_FMT)
     end
   end
+
+  def date_range_in_words(date_start, date_end)
+    if (date_start.nil? and date_end.nil?)
+      ""
+    elsif (date_start == date_end)
+      date_start.strftime(DATE_FMT)
+    elsif (date_start.nil?)
+      "Before #{date_end.strftime(DATE_FMT)}"
+    elsif (date_end.nil?)
+      "After #{date_start.strftime(DATE_FMT)}"
+    else
+      ## TODO: identify full years or months and display just the year
+      ## eg: 1838-01-01 - 1838-12-31, display as "1838"
+      "Between #{date_start.strftime(DATE_FMT)} and #{date_end.strftime(DATE_FMT)}"
+    end
+  end ## TODO: Gedcom format of date range
 
   def display_gender(gender_enum)
     if GENDER_MAP.include? gender_enum

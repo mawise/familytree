@@ -31,8 +31,24 @@ class Person < ApplicationRecord
   end
 
   before_save :set_search_name 
+  before_save :set_dates
   private
   def set_search_name
     self.search_name = ActiveSupport::Inflector.transliterate(name)
+  end
+  def pick_date_from_range(start_date, end_date)
+    if (start_date.nil? and end_date.nil?)
+      return nil
+    elsif (start_date.nil?)
+      return end_date
+    elsif (end_date.nil?)
+      return start_date
+    else # could do averge date if start and end not the same
+      return start_date
+    end
+  end
+  def set_dates
+    self.birth = pick_date_from_range(born_after, born_before)
+    self.death = pick_date_from_range(died_after, died_before)
   end
 end
