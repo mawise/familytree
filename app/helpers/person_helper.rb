@@ -1,6 +1,7 @@
 module PersonHelper
   GENDER_MAP={nil=>"",""=>"","non_binary"=>"Non-Binary","male"=>"Male","female"=>"Female"}
   DATE_FMT = "%B %-d, %Y"
+  GEDCOM_DATE_FMT = "%d %^b %Y"
   DATE_OPTIONS = [
     ["Between", "between"],
     ["On", "on"],
@@ -39,11 +40,25 @@ module PersonHelper
     elsif spans_one_year?(date_start, date_end)
       "#{date_start.year}"
     else
-      ## TODO: identify full years or months and display just the year
-      ## eg: 1838-01-01 - 1838-12-31, display as "1838"
       "Between #{date_start.strftime(DATE_FMT)} and #{date_end.strftime(DATE_FMT)}"
     end
-  end ## TODO: Gedcom format of date range
+  end
+
+  def gedcom_date_range(date_start, date_end)
+    if (date_start.nil? and date_end.nil?)
+      ""
+    elsif (date_start == date_end)
+      date_start.strftime(GEDCOM_DATE_FMT)
+    elsif (date_start.nil?)
+      "BEF #{date_end.strftime(GEDCOM_DATE_FMT)}"
+    elsif (date_end.nil?)
+      "AFT #{date_start.strftime(GEDCOM_DATE_FMT)}"
+    elsif spans_one_year?(date_start, date_end)
+      "#{date_start.year}"
+    else
+      "BET #{date_start.strftime(GEDCOM_DATE_FMT)} AND #{date_end.strftime(GEDCOM_DATE_FMT)}"
+    end
+  end
 
   def display_gender(gender_enum)
     if GENDER_MAP.include? gender_enum
@@ -174,10 +189,10 @@ module PersonHelper
       out += "1 FAMS @F#{fams_id}@\n"
     end
     out += "1 BIRT\n"
-    out += "2 DATE #{gedcom_date(person.birth)}\n" unless person.birth.nil?
+    out += "2 DATE #{gedcom_date_range(person.born_after, person.born_before)}\n" unless person.birth.nil?
     out += "2 PLAC #{person.birth_place}\n" unless person.birth_place.nil?
     out += "1 DEAT\n"
-    out += "2 DATE #{gedcom_date(person.death)}\n" unless person.death.nil?
+    out += "2 DATE #{gedcom_date_range(person.died_after, person.died_before)}\n" unless person.death.nil?
     out += "2 PLAC #{person.death_place}\n" unless person.death_place.nil?
     unless person.notes.nil?
       first_line = true
