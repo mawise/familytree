@@ -15,6 +15,18 @@ module PersonHelper
     end
   end
 
+  def spans_one_year?(date_start, date_end)
+    if (date_start.nil? or date_end.nil?)
+      false
+    elsif (date_start.year != date_end.year)
+      false
+    elsif ((date_start.day == 1) & (date_start.month == 1) & (date_end.day == 31) & (date_end.month == 12))
+      true
+    else
+      false
+    end
+  end
+
   def date_range_in_words(date_start, date_end)
     if (date_start.nil? and date_end.nil?)
       ""
@@ -24,6 +36,8 @@ module PersonHelper
       "Before #{date_end.strftime(DATE_FMT)}"
     elsif (date_end.nil?)
       "After #{date_start.strftime(DATE_FMT)}"
+    elsif spans_one_year?(date_start, date_end)
+      "#{date_start.year}"
     else
       ## TODO: identify full years or months and display just the year
       ## eg: 1838-01-01 - 1838-12-31, display as "1838"
