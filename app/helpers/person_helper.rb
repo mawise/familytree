@@ -1,6 +1,7 @@
 module PersonHelper
   GENDER_MAP={nil=>"",""=>"","non_binary"=>"Non-Binary","male"=>"Male","female"=>"Female"}
   DATE_FMT = "%B %-d, %Y"
+  MONTH_FMT = "%B, %Y"
   GEDCOM_DATE_FMT = "%d %^b %Y"
   DATE_OPTIONS = [
     ["Between", "between"],
@@ -27,6 +28,20 @@ module PersonHelper
       false
     end
   end
+  
+  def spans_one_month?(date_start, date_end)
+    if (date_start.nil? or date_end.nil?)
+      false
+    elsif (date_start.year != date_end.year)
+      false
+    elsif (date_start.month != date_end.month)
+      false
+    elsif (date_start.day == 1) & ((date_end+1).day == 1)
+      true
+    else
+      false
+    end
+  end
 
   def date_range_in_words(date_start, date_end)
     if (date_start.nil? and date_end.nil?)
@@ -34,13 +49,27 @@ module PersonHelper
     elsif (date_start == date_end)
       date_start.strftime(DATE_FMT)
     elsif (date_start.nil?)
-      "Before #{date_end.strftime(DATE_FMT)}"
+      if ((date_end.day == 1) & (date_end.month == 1))
+        "Before #{date_end.year}"
+      else
+        "Before #{date_end.strftime(DATE_FMT)}"
+      end
     elsif (date_end.nil?)
-      "After #{date_start.strftime(DATE_FMT)}"
+      if ((date_start.day == 31) & (date_start.month == 12))
+        "After #{date_start.year}"
+      else
+        "After #{date_start.strftime(DATE_FMT)}"
+      end
     elsif spans_one_year?(date_start, date_end)
       "#{date_start.year}"
-    else
-      "Between #{date_start.strftime(DATE_FMT)} and #{date_end.strftime(DATE_FMT)}"
+    elsif spans_one_month?(date_start, date_end)
+      date_start.strftime(MONTH_FMT)
+    else # Between
+      if ((date_start.day == 1) & (date_start.month == 1) & (date_end.day == 31) & (date_end.month == 12))
+        "Between #{date_start.year} and #{date_end.year}"
+      else
+        "Between #{date_start.strftime(DATE_FMT)} and #{date_end.strftime(DATE_FMT)}"
+      end
     end
   end
 
@@ -56,7 +85,11 @@ module PersonHelper
     elsif spans_one_year?(date_start, date_end)
       "#{date_start.year}"
     else
-      "BET #{date_start.strftime(GEDCOM_DATE_FMT)} AND #{date_end.strftime(GEDCOM_DATE_FMT)}"
+      if ((date_start.day == 1) & (date_start.month == 1) & (date_end.day == 31) & (date_end.month == 12))
+        "BET #{date_start.year} AND #{date_end.year}"
+      else
+        "BET #{date_start.strftime(GEDCOM_DATE_FMT)} AND #{date_end.strftime(GEDCOM_DATE_FMT)}"
+      end
     end
   end
 
