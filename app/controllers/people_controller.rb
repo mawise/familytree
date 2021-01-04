@@ -109,14 +109,14 @@ class PeopleController < ApplicationController
 
   def show_upgraph
     @person = Person.find(params[:id])
-    graph_text = make_upgraph(@person)
+    graph_text = make_upgraph(@person, params)
     @graph = create_svg(graph_text).html_safe
     render :graph, layout: false
   end
 
   def show_downgraph
     @person = Person.find(params[:id])
-    graph_text = make_downgraph(@person).html_safe
+    graph_text = make_downgraph(@person, params).html_safe
     @graph = create_svg(graph_text).html_safe
     render :graph, layout: false
   end
@@ -138,21 +138,22 @@ class PeopleController < ApplicationController
   end
 
   ## do not call directly, used for recursive calls
-  def upgraph(person)
+  def upgraph(person, opts)
     out = ""
-    out += "#{person.id}[label=\"#{person.name}\" URL=\"#{person_path(person)}\"];\n"
+  #  out += "#{person.id}[label=\"#{person.name}\" URL=\"#{person_path(person)}\"];\n"
+    out += make_person_label(person, opts)
     person.parents.each do |parent|
       out += "#{parent.id} -> #{person.id};\n"
-      out += upgraph(parent)
+      out += upgraph(parent, opts)
     end
     out
   end
 
-  def make_upgraph(person)
+  def make_upgraph(person, opts)
     out = ""
     out += "digraph G {\n"
     out += "rankdir=LR;\n"
-    out += upgraph(person)
+    out += upgraph(person, opts)
     out += "}\n"
     out
   end
@@ -165,9 +166,36 @@ class PeopleController < ApplicationController
     end
     return "\"#{id}\""
   end
+  
+  def make_person_label(person, opts)
+    extra_data = ""
 
-  def downgraph(person)
-    person_label = "#{person.id}[label=\"#{person.name}\" URL=\"#{person_path(person)}\"];\n"
+    if opts["birth_date"] == "true" and !(person.birth.nil?)
+      extra_data += "\nBorn: #{date_range_in_words(person.born_after, person.born_before)}"
+    end
+
+    if opts["birth_place"] == "true" and person.birth_place and !(person.birth_place.empty?)
+      birth_prefix = (opts["birth_date"] == "true") ? "" : "Born: "
+      extra_data += "\n#{birth_prefix}#{person.birth_place}" 
+    end
+
+    if opts["death_date"] == "true" and !(person.death.nil?)
+      extra_data += "\nDied: #{date_range_in_words(person.died_after, person.died_before)}"
+    end
+
+    if opts["death_place"] == "true" and person.death_place and !(person.death_place.empty?)
+      death_prefix = (opts["death_date"] == "true") ? "" : "Died: "
+      extra_data += "\n#{death_prefix}#{person.death_place}" 
+    end
+
+    person_label = "#{person.id}[label=\"#{person.name}#{extra_data}\" URL=\"#{person_path(person)}\"];\n"
+    return person_label
+  end
+
+  ## options:
+  # birth_date: true/false
+  def downgraph(person, opts)
+    person_label = make_person_label(person, opts)
     if person.children.size == 0
       return person_label
     end
@@ -198,7 +226,7 @@ class PeopleController < ApplicationController
     out += person_label
       ## person -> first relationship -> partners
       ## partners -> other relstionships -> person
-      ## NOTE: reverse this order for rankdir=TB
+      ## NOTE: reverse this order for rankdir=TB (top-to-bottom)
     first_relationship = true
     relationships.each do |relationship|
       next if relationship.size < 1 # child has only 1 parent
@@ -217,7 +245,7 @@ class PeopleController < ApplicationController
     end
     ## for each partner: define partner node
     partners.each do |partner|
-      out += "#{partner.id}[label=\"#{partner.name}\" URL=\"#{person_path(partner)}\"];\n"
+      out += make_person_label(partner, opts)
     end
     ## for each partner group: define relationship nodes
     relationships.each do |relationship|
@@ -242,16 +270,16 @@ class PeopleController < ApplicationController
         relationship.add(partner) unless (partner == person)
       end
       out += "#{relationship_id(person, relationship)} -> #{child.id};\n"
-      out += downgraph(child)
+      out += downgraph(child, opts)
     end
     return out
   end
 
-  def make_downgraph(person)
+  def make_downgraph(person, opts)
     out = ""
     out += "digraph G {\n"
     out += "rankdir=LR;\n"
-    out += downgraph(person)
+    out += downgraph(person, opts)
     out += "}\n"
     out
   end
