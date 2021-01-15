@@ -8,6 +8,9 @@ class Person < ApplicationRecord
 
   enum gender: {male: 0, female: 1, non_binary: 2}
 
+
+  default_scope { order(birth: :asc)}
+
   # people this person has had children with
   def partners
     p = Set.new
