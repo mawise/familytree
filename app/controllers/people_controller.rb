@@ -121,7 +121,36 @@ class PeopleController < ApplicationController
     render :graph, layout: false
   end
 
+  def show_birthdays
+    @person = Person.find(params[:id])
+    people = recursive_children(@person)
+    @birthdays = []
+    @no_birthdays = []
+    people.each do |p|
+      if p.birth.nil?
+        @no_birthdays << p
+      else
+        @birthdays << p
+      end
+    end
+    @birthdays.sort_by!{|p| [p.birth.month, p.birth.day]}
+  end
+
   private
+
+  def recursive_children(person)
+    people = Set.new
+    person.children.each do |child|
+      people.add(child)
+      child.parents.each do |parent|
+        people.add(parent)
+      end
+    end
+    person.children.each do |child|
+      people.merge(recursive_children(child))
+    end
+    return people
+  end
 
   def person_params
     params.require(:person).permit(:name, :gender, :born_before, :born_after, :birth_place, :died_before, :died_after, :death_place, :notes)
@@ -167,7 +196,7 @@ class PeopleController < ApplicationController
     return "\"#{id}\""
   end
   
-  def make_person_label(person, opts)
+  def make_person_label(person, opts, partner=false)
     extra_data = ""
 
     if opts["birth_date"] == "true" and !(person.birth.nil?)
@@ -188,7 +217,13 @@ class PeopleController < ApplicationController
       extra_data += "\n#{death_prefix}#{person.death_place}" 
     end
 
-    person_label = "#{person.id}[label=\"#{person.name}#{extra_data}\" URL=\"#{person_path(person)}\"];\n"
+    if partner and opts["partner_grey"] == "true"
+      color = "grey"
+    else
+      color = "black"
+    end
+
+    person_label = "#{person.id}[label=\"#{person.name}#{extra_data}\" URL=\"#{person_path(person)}\" fontcolor=#{color} color=#{color}];\n"
     return person_label
   end
 
@@ -222,15 +257,18 @@ class PeopleController < ApplicationController
       relationships << relationship unless relationships.include? relationship
     end
     ## cluster with person, partners, and relationship nodes. 
-    out += "subgraph \"cluster_#{person.id}\"{color=none\n"
+    out += "subgraph \"cluster_#{person.id}\"{color=none\n" #unless person.partners.empty?
     out += person_label
       ## person -> first relationship -> partners
       ## partners -> other relstionships -> person
       ## NOTE: reverse this order for rankdir=TB (top-to-bottom)
     first_relationship = true
     relationships.each do |relationship|
-      next if relationship.size < 1 # child has only 1 parent
-      if first_relationship
+      if relationship.size < 1 # child has only 1 parent
+        first_relationship = false
+        next
+      end
+      if first_relationship==true
         out += "#{person.id} -> #{relationship_id(person, relationship)}[dir=none];\n"
         relationship.each do |partner|
           out += "#{relationship_id(person, relationship)} -> #{partner.id}[dir=none];\n"
@@ -245,7 +283,7 @@ class PeopleController < ApplicationController
     end
     ## for each partner: define partner node
     partners.each do |partner|
-      out += make_person_label(partner, opts)
+      out += make_person_label(partner, opts, true)
     end
     ## for each partner group: define relationship nodes
     relationships.each do |relationship|
@@ -262,7 +300,7 @@ class PeopleController < ApplicationController
       out += ", #{relationship_id(person, relationship)}"
     end
     out += "}\n" ## end rank=same
-    out += "}\n" ## end cluster
+    out += "}\n" #unless person.partners.empty? ## end cluster
     ## for all children: relationship -> child, dg(child)
     person.children.each do |child|
       relationship = Set.new

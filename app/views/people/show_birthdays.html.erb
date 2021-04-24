@@ -1,0 +1,28 @@
+<h1>Birthdays</h1>
+<table>
+<tr>
+  <th>Name</th>
+  <th>Birthday</th>
+</tr>
+<% @birthdays.each do |person| %>
+<tr>
+  <td><%= person.name %></td>
+  <td><%= person.birth.strftime("%B %-d") %></td>
+</tr>
+<% end %>
+</table>
+
+
+<% if @no_birthdays.size > 0 %>
+<h2>Missing Birthdays</h2>
+<table>
+<tr>
+  <th>Name</th>
+</tr>
+<% @no_birthdays.each do |person| %>
+<tr>
+  <td><%= person.name %></td>
+</tr>
+<% end %>
+</table>
+<% end %>
