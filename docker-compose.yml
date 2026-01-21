@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - sqlite_data:/data
+    environment:
+      RAILS_ENV: ${RAILS_ENV:-development}
+      DB_DATABASE: /data/production.sqlite3
+      AWS_BUCKET: ${AWS_BUCKET}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE}
+      RAILS_SERVE_STATIC_FILES: "true"
+    env_file:
+      - .env
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -b 0.0.0.0"
+
+volumes:
+  sqlite_data:
