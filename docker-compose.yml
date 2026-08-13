@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  web:
+    image: ghcr.io/mawise/familytree:latest
+    ports:
+      - "3000:3000"
+    volumes:
+      - sqlite_data:/app/db
+    environment:
+      - RAILS_ENV=production
+      - SECRET_KEY_BASE=${SECRET_KEY_BASE}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_BUCKET=${AWS_BUCKET}
+    restart: always
+
+volumes:
+  sqlite_data:
