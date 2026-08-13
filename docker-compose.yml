@@ -6,7 +6,7 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - sqlite_data:/app/db
+      - sqlite_data:/app/storage
     environment:
       - RAILS_ENV=production
       - SECRET_KEY_BASE=${SECRET_KEY_BASE}
