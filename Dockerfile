@@ -8,7 +8,7 @@ RUN echo "deb http://archive.debian.org/debian bullseye main" > /etc/apt/sources
        build-essential libssl-dev libyaml-dev libreadline6-dev \
        zlib1g-dev libncurses5-dev libffi-dev libgdbm-dev git libgdbm6 libreadline-dev \
        nginx nodejs dirmngr gnupg apt-transport-https ca-certificates npm imagemagick \
-       postgresql postgresql-contrib libpq-dev cron shared-mime-info && \
+       postgresql postgresql-contrib libpq-dev cron shared-mime-info graphviz && \
     npm install --global yarn && \
     gem update --system 3.4.22 --no-document && \
     gem install bundler -v 2.4.12 --no-document && \
