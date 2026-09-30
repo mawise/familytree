@@ -8,6 +8,7 @@ services:
       - "3001:3001"
     volumes:
       - familytree_storage:/app/storage
+      - ./data:/app/data
     tmpfs:
       - /tmp/pids/
     environment:

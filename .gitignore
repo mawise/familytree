@@ -32,3 +32,4 @@
 
 deployment/*
 /.env
+/data/
