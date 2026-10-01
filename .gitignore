@@ -17,6 +17,11 @@
 !/log/.keep
 !/tmp/.keep
 
+# Keep the tmp/storage/ directory but nothing in it
+!/tmp/storage/
+/tmp/storage/*
+!/tmp/storage/.keep
+
 # Ignore uploaded files in development
 /storage/*
 !/storage/.keep
